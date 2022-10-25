@@ -1,0 +1,36 @@
+import org.apache.tools.ant.filters.ReplaceTokens;
+
+plugins {
+    id 'java'
+}
+
+group 'technikcamps'
+version "${project.property('plugin.version')}"
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://hub.spigotmc.org/nexus/content/repositories/snapshots/"
+    }
+}
+
+dependencies {
+    var spigot_version = "1.11.2-R0.1-SNAPSHOT"
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
+
+    implementation("org.spigotmc:spigot-api:${spigot_version}") {
+        exclude group: "net.md-5"
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
+
+processResources {
+    filter ReplaceTokens, tokens: [
+            "plugin.version": project.property("plugin.version")
+    ]
+}

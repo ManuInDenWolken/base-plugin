@@ -1,0 +1,2 @@
+# As a linux-only executable, the gradle worker has end in lf.
+gradelew text eol=lf

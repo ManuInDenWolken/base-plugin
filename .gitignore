@@ -1,0 +1,6 @@
+# IDE specific files and dirs
+.idea/
+
+# Gradle fs nodes
+.gradle/
+build/

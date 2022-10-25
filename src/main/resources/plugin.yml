@@ -1,0 +1,6 @@
+name: base-plugin
+version: @plugin.version@
+description: Just another base plugin for example servers.
+author: ManuInDenWolken
+main: ktfc.BasePlugin
+commands:
