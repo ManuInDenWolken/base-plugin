@@ -1,4 +1,4 @@
-package ktfc.scoreboards;
+package ktfc.scoreboard;
 
 import org.bukkit.entity.Player;
 

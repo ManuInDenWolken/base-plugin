@@ -1,4 +1,4 @@
-package ktfc.scoreboards;
+package ktfc.scoreboard;
 
 import com.google.common.base.Preconditions;
 import org.bukkit.Bukkit;
@@ -10,9 +10,9 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
-import java.util.List;
-
 public class MainScoreboard implements ApplicableScoreboard {
+
+  private static final String ObjectiveName = "sidebar_board";
 
   private Scoreboard scoreboard;
   private final Configuration config;
@@ -23,7 +23,7 @@ public class MainScoreboard implements ApplicableScoreboard {
 
   public static MainScoreboard withConfiguration(FileConfiguration config) {
     Preconditions.checkNotNull(config);
-    MainScoreboard scoreboard = new MainScoreboard(config);
+    var scoreboard = new MainScoreboard(config);
     scoreboard.initialize();
     return scoreboard;
   }
@@ -31,14 +31,15 @@ public class MainScoreboard implements ApplicableScoreboard {
   @Override
   public void initialize() {
     this.scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
-    final String title = colorText(config.getString("scoreboard.title"));
-    final List<String> scores = config.getStringList("scoreboard.lines");
-    final Objective objective = scoreboard.registerNewObjective("sidebar_board", "dummy");
+    final var title = colorText(config.getString("scoreboard.title"));
+    final var scores = config.getStringList("scoreboard.lines");
+    final var objective = getOrRegisterObjective();
     objective.setDisplayName(title);
     objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-    for (int scoreIndex = 0; scoreIndex < scores.size(); scoreIndex++) {
-      String line = colorText(scores.get(scoreIndex));
-      objective.getScore(line).setScore(scoreIndex);
+    for (int lineIndex = 0; lineIndex < scores.size(); lineIndex++) {
+      int score = scores.size() - lineIndex;
+      var line = colorText(scores.get(lineIndex));
+      objective.getScore(line).setScore(score);
     }
   }
 
@@ -49,5 +50,13 @@ public class MainScoreboard implements ApplicableScoreboard {
 
   private String colorText(String text) {
     return ChatColor.translateAlternateColorCodes('&', text);
+  }
+
+  private Objective getOrRegisterObjective() {
+    var objective = this.scoreboard.getObjective(ObjectiveName);
+    if (objective == null) {
+      objective = this.scoreboard.registerNewObjective(ObjectiveName, "dummy");
+    }
+    return objective;
   }
 }
